@@ -1,0 +1,53 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "AllowS3BucketListing",
+            "Action": [
+                "s3:ListBucket"
+            ],
+            "Effect": "Allow",
+            "Resource": [
+                "arn:aws:s3:::YOUR-OWN-PROVISIONING-S3-BUCKET-HERE"
+            ],
+            "Condition": {
+                "StringEquals": {
+                    "s3:prefix": [
+                        "",
+                        "Packer/"
+                    ],
+                    "s3:delimiter": [
+                        "/"
+                    ]
+                }
+            }
+        },
+        {
+            "Sid": "AllowListingOfdesiredFolder",
+            "Action": [
+                "s3:ListBucket"
+            ],
+            "Effect": "Allow",
+            "Resource": [
+                "arn:aws:s3:::YOUR-OWN-PROVISIONING-S3-BUCKET-HERE"
+            ],
+            "Condition": {
+                "StringLike": {
+                    "s3:prefix": [
+                        "Packer/*"
+                    ]
+                }
+            }
+        },
+        {
+            "Sid": "AllowAllS3ActionsInFolder",
+            "Effect": "Allow",
+            "Action": [
+                "s3:GetObject"
+            ],
+            "Resource": [
+                "arn:aws:s3:::YOUR-OWN-PROVISIONING-S3-BUCKET-HERE/Packer/*"
+            ]
+        }
+    ]
+}

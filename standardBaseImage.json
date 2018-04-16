@@ -1,0 +1,51 @@
+{
+  "builders": [{
+    "type": "amazon-ebs",
+    "region": "us-east-1",
+    "instance_type": "t2.small",
+    "ami_name": "Shogan-Server-2016-Build-{{isotime \"2006-01-02\"}}-{{uuid}}",
+    "iam_instance_profile": "Packer-S3-Access",
+    "user_data_file": "./ProvisionScripts/ConfigureWinRM.ps1",
+    "communicator": "winrm",
+    "winrm_username": "Administrator",
+    "winrm_use_ssl": true,
+    "winrm_insecure": true,
+    "source_ami_filter": {
+      "filters": {
+        "name": "Windows_Server-2012-R2_RTM-English-64Bit-Base-*"
+      },
+      "most_recent": true
+    }
+  }],
+  "provisioners": [
+    {
+        "type": "powershell",
+        "scripts": [
+            "./ProvisionScripts/EC2Config.ps1",
+            "./ProvisionScripts/BundleConfig.ps1",
+            "./ProvisionScripts/SetupBaseRequirementsAndTools.ps1",
+            "./ProvisionScripts/DownloadAndInstallS3Artifacts.ps1"
+        ]
+    },
+    {
+        "type": "file",
+        "source": "./Tests",
+        "destination": "C:/Windows/Temp"
+    },
+    {
+        "type": "powershell",
+        "script": "./ProvisionScripts/RunPesterTests.ps1"
+    },
+    {
+        "type": "file",
+        "source": "PesterTestResults.xml",
+        "destination": "PesterTestResults.xml",
+        "direction": "download"
+    }
+  ],
+  "post-processors": [
+    {
+        "type": "manifest"
+    }
+  ]
+}

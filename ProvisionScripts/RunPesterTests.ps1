@@ -1,0 +1,1 @@
+Invoke-Pester C:/Windows/Temp/* -OutputFile PesterTestResults.xml -OutputFormat NUnitXml
