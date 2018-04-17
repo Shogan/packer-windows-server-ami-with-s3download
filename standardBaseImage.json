@@ -3,7 +3,7 @@
     "type": "amazon-ebs",
     "region": "us-east-1",
     "instance_type": "t2.small",
-    "ami_name": "Shogan-Server-2016-Build-{{isotime \"2006-01-02\"}}-{{uuid}}",
+    "ami_name": "Shogan-Server-2012-Build-{{isotime \"2006-01-02\"}}-{{uuid}}",
     "iam_instance_profile": "Packer-S3-Access",
     "user_data_file": "./ProvisionScripts/ConfigureWinRM.ps1",
     "communicator": "winrm",
